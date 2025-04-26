@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Packaging Prompt Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #ff7e5f;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+        
+        .gallery-section {
+            margin-bottom: 30px;
+        }
+        
+        .gallery-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        @media (min-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+        
+        .gallery-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .gallery-item.selected {
+            border: 2px solid var(--secondary-color);
+        }
+        
+        .gallery-img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+        
+        .gallery-label {
+            padding: 8px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        
+        .pagination button {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .pagination button.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input[type="text"], 
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .color-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .color-option.selected {
+            border-color: var(--dark-color);
+        }
+        
+        .result-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .result-prompt {
+            background: white;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #3a5a8f;
+        }
+        
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #e66a4a;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pictorial Mockup Product Packaging Prompt Generator</h1>
+        
+        <div class="gallery-section">
+            <h2 class="gallery-title">Select Product Packaging Type</h2>
+            <div class="gallery-grid" id="packagingGallery">
+                <!-- Gallery items will be inserted here by JavaScript -->
+            </div>
+            <div class="pagination" id="pagination">
+                <!-- Pagination buttons will be inserted here by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <div class="form-group">
+                <label for="productName">Product Name</label>
+                <input type="text" id="productName" placeholder="Enter your product name">
+            </div>
+            
+            <div class="form-group">
+                <label for="fontStyle">Font Style</label>
+                <select id="fontStyle">
+                    <option value="modern sans-serif">Modern Sans-serif</option>
+                    <option value="elegant serif">Elegant Serif</option>
+                    <option value="bold condensed">Bold Condensed</option>
+                    <option value="handwritten script">Handwritten Script</option>
+                    <option value="vintage typography">Vintage Typography</option>
+                    <option value="futuristic">Futuristic</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Font Effect</label>
+                <select id="fontEffect">
+                    <option value="none">None</option>
+                    <option value="shadow">Shadow</option>
+                    <option value="glow">Glow</option>
+                    <option value="embossed">Embossed</option>
+                    <option value="metallic">Metallic</option>
+                    <option value="gradient">Gradient</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Background Color</label>
+                <div class="color-options" id="colorOptions">
+                    <div class="color-option selected" style="background: #4a6fa5;" data-color="blue"></div>
+                    <div class="color-option" style="background: #ff7e5f;" data-color="coral"></div>
+                    <div class="color-option" style="background: #6bd3a0;" data-color="mint"></div>
+                    <div class="color-option" style="background: #f9c74f;" data-color="yellow"></div>
+                    <div class="color-option" style="background: #90be6d;" data-color="green"></div>
+                    <div class="color-option" style="background: #577590;" data-color="navy"></div>
+                    <div class="color-option" style="background: #f94144;" data-color="red"></div>
+                    <div class="color-option" style="background: #f3722c;" data-color="orange"></div>
+                    <div class="color-option" style="background: #277da1;" data-color="teal"></div>
+                    <div class="color-option" style="background: #f8961e;" data-color="gold"></div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="slogan">Slogan</label>
+                <textarea id="slogan" placeholder="Enter your product slogan"></textarea>
+            </div>
+        </div>
+        
+        <div class="result-section">
+            <h2>Your Prompt</h2>
+            <div class="result-prompt" id="generatedPrompt">
+                Your prompt will appear here after selecting options.
+            </div>
+            <div class="action-buttons">
+                <button class="btn-primary" id="generateBtn">Generate Prompt</button>
+                <button class="btn-secondary" id="copyBtn">Copy Prompt</button>
+                <button class="btn-secondary" id="shareBtn">Share via WhatsApp</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Packaging types with placeholder image URLs (in a real app, use actual image URLs)
+        const packagingTypes = [
+            { name: "jug", image: "https://via.placeholder.com/150?text=Jug" },
+            { name: "toggle clamp box", image: "https://via.placeholder.com/150?text=Toggle+Clamp" },
+            { name: "aseptic carton", image: "https://via.placeholder.com/150?text=Aseptic+Carton" },
+            { name: "barrier bag", image: "https://via.placeholder.com/150?text=Barrier+Bag" },
+            { name: "kraft tube", image: "https://via.placeholder.com/150?text=Kraft+Tube" },
+            { name: "tetra pak", image: "https://via.placeholder.com/150?text=Tetra+Pak" },
+            { name: "plywood crate", image: "https://via.placeholder.com/150?text=Plywood+Crate" },
+            { name: "cartridge", image: "https://via.placeholder.com/150?text=Cartridge" },
+            { name: "dover closure", image: "https://via.placeholder.com/150?text=Dover+Closure" },
+            { name: "slipcase", image: "https://via.placeholder.com/150?text=Slipcase" },
+            { name: "pillow pouch", image: "https://via.placeholder.com/150?text=Pillow+Pouch" },
+            { name: "pharmaceutical bottle", image: "https://via.placeholder.com/150?text=Pharma+Bottle" },
+            { name: "plastic bag", image: "https://via.placeholder.com/150?text=Plastic+Bag" },
+            { name: "cup", image: "https://via.placeholder.com/150?text=Cup" },
+            { name: "shrink sleeve", image: "https://via.placeholder.com/150?text=Shrink+Sleeve" },
+            { name: "cylinder", image: "https://via.placeholder.com/150?text=Cylinder" },
+            { name: "canister", image: "https://via.placeholder.com/150?text=Canister" },
+            { name: "display box", image: "https://via.placeholder.com/150?text=Display+Box" },
+            { name: "rolled wrap", image: "https://via.placeholder.com/150?text=Rolled+Wrap" },
+            { name: "pail", image: "https://via.placeholder.com/150?text=Pail" },
+            { name: "ampoule", image: "https://via.placeholder.com/150?text=Ampoule" },
+            { name: "folding carton", image: "https://via.placeholder.com/150?text=Folding+Carton" },
+            { name: "paper bag", image: "https://via.placeholder.com/150?text=Paper+Bag" },
+            { name: "wine bottle", image: "https://via.placeholder.com/150?text=Wine+Bottle" },
+            { name: "vacuum bottle", image: "https://via.placeholder.com/150?text=Vacuum+Bottle" },
+            { name: "rigid box", image: "https://via.placeholder.com/150?text=Rigid+Box" },
+            { name: "aluminium bottle", image: "https://via.placeholder.com/150?text=Aluminium+Bottle" },
+            { name: "box", image: "https://via.placeholder.com/150?text=Box" },
+            { name: "stand-up pouch", image: "https://via.placeholder.com/150?text=Stand-Up+Pouch" },
+            { name: "bottle", image: "https://via.placeholder.com/150?text=Bottle" },
+            { name: "jar", image: "https://via.placeholder.com/150?text=Jar" },
+            { name: "tube", image: "https://via.placeholder.com/150?text=Tube" },
+            { name: "can", image: "https://via.placeholder.com/150?text=Can" },
+            { name: "blister pack", image: "https://via.placeholder.com/150?text=Blister+Pack" },
+            { name: "label", image: "https://via.placeholder.com/150?text=Label" },
+            { name: "slipcase", image: "https://via.placeholder.com/150?text=Slipcase" },
+            { name: "hanging bag", image: "https://via.placeholder.com/150?text=Hanging+Bag" },
+            { name: "tray", image: "https://via.placeholder.com/150?text=Tray" },
+            { name: "gable box", image: "https://via.placeholder.com/150?text=Gable+Box" },
+            { name: "drum", image: "https://via.placeholder.com/150?text=Drum" },
+            { name: "carton", image: "https://via.placeholder.com/150?text=Carton" },
+            { name: "clamshell", image: "https://via.placeholder.com/150?text=Clamshell" },
+            { name: "wrapper", image: "https://via.placeholder.com/150?text=Wrapper" },
+            { name: "tray sleeve", image: "https://via.placeholder.com/150?text=Tray+Sleeve" }
+        ];
+        
+        // DOM elements
+        const packagingGallery = document.getElementById('packagingGallery');
+        const pagination = document.getElementById('pagination');
+        const productName = document.getElementById('productName');
+        const fontStyle = document.getElementById('fontStyle');
+        const fontEffect = document.getElementById('fontEffect');
+        const colorOptions = document.querySelectorAll('.color-option');
+        const slogan = document.getElementById('slogan');
+        const generatedPrompt = document.getElementById('generatedPrompt');
+        const generateBtn = document.getElementById('generateBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        
+        // App state
+        let currentPage = 1;
+        const itemsPerPage = 6;
+        let selectedPackaging = null;
+        
+        // Initialize the app
+        function init() {
+            renderGallery();
+            setupEventListeners();
+        }
+        
+        // Render the packaging gallery with pagination
+        function renderGallery() {
+            packagingGallery.innerHTML = '';
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedItems = packagingTypes.slice(startIndex, endIndex);
+            
+            paginatedItems.forEach(item => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = `gallery-item ${selectedPackaging === item.name ? 'selected' : ''}`;
+                galleryItem.dataset.name = item.name;
+                
+                galleryItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="gallery-img">
+                    <div class="gallery-label">${item.name}</div>
+                `;
+                
+                packagingGallery.appendChild(galleryItem);
+            });
+            
+            renderPagination();
+        }
+        
+        // Render pagination buttons
+        function renderPagination() {
+            const pageCount = Math.ceil(packagingTypes.length / itemsPerPage);
+            
+            pagination.innerHTML = '';
+            
+            for (let i = 1; i <= pageCount; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = i;
+                pageBtn.className = i === currentPage ? 'active' : '';
+                pageBtn.addEventListener('click', () => {
+                    currentPage = i;
+                    renderGallery();
+                });
+                
+                pagination.appendChild(pageBtn);
+            }
+        }
+        
+        // Set up event listeners
+        function setupEventListeners() {
+            // Packaging selection
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.gallery-item')) {
+                    const galleryItem = e.target.closest('.gallery-item');
+                    selectedPackaging = galleryItem.dataset.name;
+                    
+                    // Update UI
+                    document.querySelectorAll('.gallery-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    galleryItem.classList.add('selected');
+                }
+            });
+            
+            // Color selection
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    colorOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            
+            // Generate prompt
+            generateBtn.addEventListener('click', generatePrompt);
+            
+            // Copy prompt
+            copyBtn.addEventListener('click', copyPrompt);
+            
+            // Share via WhatsApp
+            shareBtn.addEventListener('click', sharePrompt);
+        }
+        
+        // Generate the final prompt
+        function generatePrompt() {
+            if (!selectedPackaging) {
+                alert('Please select a packaging type first');
+                return;
+            }
+            
+            if (!productName.value.trim()) {
+                alert('Please enter a product name');
+                return;
+            }
+            
+            const selectedColor = document.querySelector('.color-option.selected').dataset.color;
+            
+            const prompt = `Displaying commercial ${selectedPackaging} product with brand ${productName.value.trim()} by using font style ${fontStyle.value}, with effect ${fontEffect.value} as a background mixing color with ${selectedColor}, in the below center displaying Slogan "${slogan.value.trim()}", intricated, detailed, vibrant, style and smooth`;
+            
+            generatedPrompt.textContent = prompt;
+        }
+        
+        // Copy prompt to clipboard
+        function copyPrompt() {
+            if (!generatedPrompt.textContent || generatedPrompt.textContent === 'Your prompt will appear here after selecting options.') {
+                alert('Please generate a prompt first');
+                return;
+            }
+            
+            navigator.clipboard.writeText(generatedPrompt.textContent)
+                .then(() => alert('Prompt copied to clipboard!'))
+                .catch(err => console.error('Failed to copy:', err));
+        }
+        
+        // Share prompt via WhatsApp
+        function sharePrompt() {
+            if (!generatedPrompt.textContent || generatedPrompt.textContent === 'Your prompt will appear here after selecting options.') {
+                alert('Please generate a prompt first');
+                return;
+            }
+            
+            const text = encodeURIComponent(generatedPrompt.textContent);
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+        
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
